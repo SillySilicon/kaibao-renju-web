@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="五子棋陪练" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#f4efe6" />
+    <title>开宝五子棋陪练</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icons/icon-180.png" />
+    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar">
+        <button class="set-btn" id="setBtn" type="button">
+          <span id="setName">载入中</span>
+          <svg class="caret" viewBox="0 0 10 6" aria-hidden="true">
+            <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </button>
+        <div class="meta">
+          <span id="puzzleNo">第 1 题</span>
+          <span class="sep">·</span>
+          <span id="solvedInfo">已解 0</span>
+        </div>
+      </header>
+
+      <main class="stage" id="stage">
+        <canvas id="board" aria-label="棋盘"></canvas>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </main>
+
+      <div class="statusbar">
+        <span class="turn-dot" id="turnDot"></span>
+        <span id="statusText">请落子</span>
+      </div>
+
+      <nav class="toolbar">
+        <button class="tool" id="prevBtn" type="button" aria-label="上一题">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="tool" id="restartBtn" type="button">重来</button>
+        <button class="tool" id="undoBtn" type="button">悔棋</button>
+        <button class="tool" id="aboutBtn" type="button">关于</button>
+        <button class="tool" id="nextBtn" type="button" aria-label="下一题">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 习题集选择 -->
+    <div class="sheet-backdrop hidden" id="sheetBackdrop">
+      <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="选择习题集">
+        <div class="sheet-grip"></div>
+        <header class="sheet-head">
+          <h2>习题集</h2>
+          <button class="text-btn" id="sheetClose" type="button">完成</button>
+        </header>
+        <div class="set-list" id="setList"></div>
+        <footer class="sheet-foot">
+          <label class="import-btn" for="importInput">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 15v3.5A1.5 1.5 0 006.5 20h11a1.5 1.5 0 001.5-1.5V15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            导入自定义题库
+          </label>
+          <input type="file" id="importInput" accept=".json,application/json" hidden />
+        </footer>
+      </section>
+    </div>
+
+    <!-- 关于 / 隐私政策说明页 -->
+    <div class="page hidden" id="aboutPage" role="dialog" aria-modal="true" aria-label="关于">
+      <header class="page-head">
+        <button class="text-btn" id="aboutClose" type="button">返回</button>
+        <h2>关于</h2>
+        <span class="page-head-spacer"></span>
+      </header>
+      <div class="page-body" id="aboutBody"></div>
+    </div>
+
+    <!-- 首次运行隐私确认 -->
+    <div class="modal-backdrop hidden" id="privacyModal">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+        <h2 id="privacyTitle">「开宝五子棋陪练」隐私政策</h2>
+        <div class="modal-body">
+          <p>本应用不搜集有关用户或访问者的任何个人信息。用户无需任何注册或联网，即可自由使用本应用的所有功能。</p>
+          <p>应用不访问你的位置、通讯录、照片或麦克风，也不会向任何服务器发送数据。</p>
+          <p>你导入的习题集与解题进度只保存在本机浏览器中，卸载或清除网站数据后即被删除。</p>
+          <p>「关于」页面中可能包含指向其他站点的链接，我们不对这些网站的内容与隐私实践负责。</p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn ghost" id="declineBtn" type="button">不同意</button>
+          <button class="btn primary" id="agreeBtn" type="button">我同意</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- 对局结果 -->
+    <div class="modal-backdrop hidden" id="resultModal">
+      <section class="modal result" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+        <div class="result-icon" id="resultIcon"></div>
+        <h2 id="resultTitle">恭喜</h2>
+        <p id="resultText"></p>
+        <div class="modal-actions">
+          <button class="btn ghost" id="resultRetry" type="button">重来</button>
+          <button class="btn primary" id="resultNext" type="button">下一题</button>
+        </div>
+      </section>
+    </div>
+
+    <script src="js/engine.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/puzzles.js"></script>
+    <script src="js/about-data.js"></script>
+    <script src="js/ui.js"></script>
+  </body>
+</html>

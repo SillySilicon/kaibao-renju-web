@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>开宝五子棋陪练</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: radial-gradient(circle at 30% 20%, #f7efe3, #e7dccb 60%, #d9cbb4);
+        color: #2c2723;
+        text-align: center;
+      }
+      .card {
+        max-width: 420px;
+      }
+      h1 {
+        font-size: 26px;
+        margin: 0 0 8px;
+        letter-spacing: 1px;
+      }
+      p {
+        margin: 0 0 24px;
+        color: #6f6558;
+        font-size: 14.5px;
+        line-height: 1.7;
+      }
+      a.btn {
+        display: inline-block;
+        padding: 14px 30px;
+        border-radius: 14px;
+        background: #b3542f;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 16px;
+        box-shadow: 0 10px 24px rgba(179, 84, 47, 0.28);
+      }
+      a.btn:active {
+        transform: scale(0.98);
+      }
+      .tip {
+        margin-top: 22px;
+        font-size: 12.5px;
+        color: #8b8073;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>开宝五子棋陪练</h1>
+      <p>五子棋诘棋练习 · 8 套题库 433 题 · 有禁手 · 可导入自定义题库</p>
+      <a class="btn" href="./web/index.html">进入应用</a>
+      <p class="tip">
+        在 iPhone 上用 Safari 打开后，点「分享 → 添加到主屏幕」，即可全屏离线使用。
+      </p>
+    </div>
+    <script>
+      // 直接跳转到应用（保留按钮作为兜底）
+      if (!/preview|nojs/.test(location.search)) {
+        location.replace("./web/index.html");
+      }
+    </script>
+  </body>
+</html>
