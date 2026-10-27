@@ -855,6 +855,34 @@
         navigator.serviceWorker.register("sw.js").catch(function () {});
       });
     }
+
+    setupInstallHint();
+  }
+
+  // iOS Safari 里提示「添加到主屏幕」；已装到桌面或用户关过一次就不再显示
+  function setupInstallHint() {
+    var bar = document.getElementById("installBar");
+    if (!bar) return;
+    var ua = navigator.userAgent || "";
+    var isIOS =
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    var standalone =
+      navigator.standalone === true ||
+      (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+    var KEY = "kaibao.installHint";
+    var dismissed = false;
+    try {
+      dismissed = localStorage.getItem(KEY) === "1";
+    } catch (e) {}
+    if (!isIOS || standalone || dismissed) return;
+    bar.hidden = false;
+    document.getElementById("installClose").addEventListener("click", function () {
+      bar.hidden = true;
+      try {
+        localStorage.setItem(KEY, "1");
+      } catch (e) {}
+    });
   }
 
   if (document.readyState === "loading") {
