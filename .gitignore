@@ -20,5 +20,6 @@ _preview_*.html
 _diag.html
 *.log
 
-# 压缩包
+# 压缩包（download/ 下的离线包要提交，作例外）
 *.zip
+!download/*.zip
